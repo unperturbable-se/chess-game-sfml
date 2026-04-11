@@ -5,8 +5,8 @@
 #include <vector>
 #include "grid.h"
 #include <fstream>
-#include <windows.h>
 #include <filesystem>
+#include "crossplatform.h"
 
 void outputMouseInput(sf::RenderWindow& screen);
 void checkKey();
@@ -15,7 +15,8 @@ using namespace sf;
 
 int main()
 {
-    WinExec("cmd.exe /c backend\\backend.bat", SW_HIDE);
+    MAKE_FIFO("backend/mouseOutput.txt");
+    run_backend();
     while(std::filesystem::exists("backend/run"))
     if(std::filesystem::exists("backend/render"))
     {
@@ -35,9 +36,10 @@ int main()
          }
 
     screen.close();   
+    
     }
 
-
+    UNLINK_FIFO("mouseOutput.txt");
     return 0;
 }
 
@@ -58,7 +60,7 @@ void outputMouseInput(RenderWindow& screen)
  char x='a'+coordinates.x/100;
  char y='8'-coordinates.y/100;
  std::string a={x,y};
- std::ofstream out("mouseOutput.txt",std::ios::app);
+ std::ofstream out("backend/mouseOutput.txt",std::ios::app);
  out<<a<<std::endl;
  out.close();
 }

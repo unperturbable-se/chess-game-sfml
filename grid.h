@@ -19,6 +19,7 @@ class Grid
 
     void updateFileGrid()
    {
+    while(!std::filesystem::exists("backend/data.txt")){}
     std::ifstream data("backend/data.txt");
     for(int i=0;i<8;i++)
        for(int j=0;j<8;j++)

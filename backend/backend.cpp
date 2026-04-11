@@ -5,8 +5,8 @@
 #include <cctype>
 #include <fstream>
 #include <filesystem>
-#include <windows.h>
 #include <cstdio>
+#include "../crossplatform.h"
 
 
 
@@ -303,6 +303,7 @@ public:
 
 int main()
 {
+    MAKE_FIFO("data.txt");
     try
     {
         Game game;
@@ -314,12 +315,14 @@ int main()
     {
         std::cerr << e.what() << '\n';
     }
+    UNLINK_FIFO("data.txt");
     
     return 0;
 }
 
 void refresh() 
 {
+    while(!std::filesystem::exists("../mouseOutput.txt")){};
     static ifstream in("../mouseOutput.txt");
     cin.rdbuf(in.rdbuf());
 
